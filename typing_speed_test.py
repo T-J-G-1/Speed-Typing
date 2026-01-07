@@ -9,11 +9,12 @@ BACKGROUND = "#f0f0f0"
 HIGH_SCORE_FILE = "high_score.txt"  
 
 # Load high score from a file  
-def load_high_score():  
-    if os.path.exists(HIGH_SCORE_FILE):  
-        with open(HIGH_SCORE_FILE, 'r') as file:  
-            return float(file.read().strip())  
-    return 0.0  
+def load_high_score():
+    try:
+        with open(HIGH_SCORE_FILE, 'r') as file:
+            return float(file.read().strip())
+    except (FileNotFoundError, ValueError):
+        return 0.0
 
 # Save high score to a file  
 def save_high_score(new_high_score):  
@@ -36,7 +37,7 @@ def calculate_typing_speed(typed_text, elapsed_time):
 # Start the typing test  
 def start_typing_test():  
     input_box.delete("1.0", "end")  # Clear the text box  
-    input_box.config(state=NORMAL)  # Enable the input box  
+    input_box.config(state=DISABLED)  # Enable the input box  
     score_label.config(text="Typing speed: 0.00 characters per minute")  # Reset score display  
 
     countdown_timer.reset()  # Reset the countdown timer  
@@ -140,7 +141,7 @@ def main():
     high_score_label = Label(root, text=f"High Score: {high_score:.2f} characters per minute", bg=BACKGROUND, font=("Arial", 20), wraplength=350)  
     high_score_label.pack(pady=10)  
 
-    input_box = Text(root, width=40, height=10)  
+    input_box = Text(root, width=40, height=10, state=DISABLED)  
     input_box.pack(pady=10)  
 
     start_button = Button(root, text="Start", command=start_typing_test)  # Start the game or restart it  
